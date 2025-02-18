@@ -11,7 +11,10 @@ public class Traversals {
    * @return the sum of leaf node values, or 0 if the tree is null
    */
   public static int sumLeafNodes(TreeNode<Integer> node) {
-    return 0;
+    if (node == null) return 0;
+    if (node.right == null && node.left == null) return node.value;
+
+    return sumLeafNodes(node.left) + sumLeafNodes(node.right);
   }
 
   /**
@@ -23,7 +26,10 @@ public class Traversals {
    * @return the count of internal nodes, or 0 if the tree is null
    */
   public static int countInternalNodes(TreeNode<Integer> node) {
-    return 0;
+    if (node == null || node.left == null && node.right == null) return 0;
+    // if (node.left == null && node.right == null) return 0;
+
+    return 1 + countInternalNodes(node.left) + countInternalNodes(node.right);
   }
 
   /**
@@ -37,7 +43,20 @@ public class Traversals {
    * @return a post-order traversal string, or an empty string if the tree is null
    */
   public static <T> String buildPostOrderString(TreeNode<T> node) {
-    return null;
+    StringBuilder text = new StringBuilder(); // Strings are immutable, so must use a StringBuilder;
+    buildPostOrderString(node, text);
+    return text.toString();
+  }
+
+  public static <T> StringBuilder buildPostOrderString(TreeNode<T> node, StringBuilder text) {
+    if (node == null) return text;
+
+    buildPostOrderString(node.left, text);
+    buildPostOrderString(node.right, text);
+    text.append(node.value);
+
+    return text;
+
   }
 
   /**
@@ -49,7 +68,22 @@ public class Traversals {
    * @return a list of node values in a top-to-bottom order, or an empty list if the tree is null
    */
   public static <T> List<T> collectLevelOrderValues(TreeNode<T> node) {
-    return null;
+    Queue<TreeNode<T>> queue = new LinkedList<>();
+    List<T> values = new LinkedList<>();
+
+    queue.add(node);
+
+    while (!queue.isEmpty()) {
+      TreeNode<T> current = queue.poll();
+
+      if (current == null) continue;
+
+      values.add(current.value);
+      queue.add(current.left);
+      queue.add(current.right);
+    }
+
+    return values;
   }
 
   /**
