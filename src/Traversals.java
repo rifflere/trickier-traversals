@@ -120,7 +120,20 @@ public class Traversals {
    * @return true if there exists a strictly increasing root-to-leaf path, false otherwise
    */
   public static boolean hasStrictlyIncreasingPath(TreeNode<Integer> node) {
-    return false;
+    if (node != null && node.left == null && node.right == null) return true;
+    boolean increasing = false;
+
+    return hasStrictlyIncreasingPath(node, increasing);
+  }
+
+  public static boolean hasStrictlyIncreasingPath(TreeNode<Integer> node, boolean increasing) {
+    if (node == null) return increasing;
+    if (node.left == null && node.right == null) return increasing;
+
+    if (node.value < node.left.value || node.value < node.right.value) return true;
+    if (node.value >= node.left.value || node.value >= node.right.value) return false;
+    
+    return (hasStrictlyIncreasingPath(node.left, increasing) || hasStrictlyIncreasingPath(node.right, increasing));
   }
 
   // OPTIONAL CHALLENGE
@@ -135,7 +148,13 @@ public class Traversals {
    * @return true if the trees have the same shape, false otherwise
    */
   public static <T> boolean haveSameShape(TreeNode<T> nodeA, TreeNode<T> nodeB) {
-    return false;
+    if (nodeA == null && nodeB == null) return true;
+    if (nodeA == null ^ nodeB == null) return false;
+
+    boolean sameLeft = haveSameShape(nodeA.left, nodeB.left);
+    boolean sameRight = haveSameShape(nodeA.right, nodeB.right);
+
+    return (sameLeft && sameRight);
   }
 
 
