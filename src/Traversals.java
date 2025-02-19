@@ -186,6 +186,41 @@ public class Traversals {
    * @return a list of lists, where each inner list represents a root-to-leaf path in pre-order
    */
   public static <T> List<List<T>> findAllRootToLeafPaths(TreeNode<T> node) {
-    return null;
+    List<List<T>> listOfLists = new ArrayList<>();
+    if (node == null) return listOfLists;
+    List<T> list = new ArrayList<>();
+    list.add(node.value);
+
+    findAllRootToLeafPaths(node.left, listOfLists, list);
+    findAllRootToLeafPaths(node.right, listOfLists, list);
+
+    return listOfLists;
+  }
+
+  public static <T> List<T> findAllRootToLeafPaths(TreeNode<T> node, List<List<T>> listOfLists, List<T> list) {
+    // store a copy of the list in ArrayList currentList
+    List<T> currentList = new ArrayList<>();
+    currentList = List.copyOf(list);
+    
+    // if null, return current list
+    if (node == null) return currentList;
+
+    // add current value to list
+    currentList.add(node.value);
+
+    // if at a leaf, add current list to list of lists, then remove current value from list
+    if (node.right == null && node.left == null) {
+      listOfLists.add(currentList);
+      currentList.remove(node.value);
+      return currentList;
+    }
+
+    // traverse left with listOfLists and list
+    findAllRootToLeafPaths(node.left, listOfLists, currentList);
+    // traverse right with listOfLists and list
+    findAllRootToLeafPaths(node.right, listOfLists, currentList);
+
+    // pass current list
+    return currentList;
   }
 }
